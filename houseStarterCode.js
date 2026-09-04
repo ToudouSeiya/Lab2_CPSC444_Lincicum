@@ -7,9 +7,27 @@ var gl;
 
 var points = [
 
+    vec4(0.0, 0.0, 1.0, 1.0), //rectangle
+    vec4(-1, 0.0, 1.0, 1.0),
+    vec4(-1, 1, 1.0, 1.0),
+    vec4(0.0, 1, 1.0, 1.0),
+
+    vec4(0.0, 0.0, 0.5, 1.0), //triangle
+    vec4(-1, 0, 0.5, 1.0),
+    vec4(-1, 1, 0.5, 1.0)
+
 ];
 
 var colors = [
+
+    vec4(0.9, 0.5, 0.2, 1.0), //brown
+    vec4(0.9, 0.5, 0.2, 1.0), 
+    vec4(0.9, 0.5, 0.2, 1.0),  
+    vec4(0.9, 0.5, 0.2, 1.0),
+    
+    vec4(0.7, 0.2, 0.0, 1.0), //darker brown
+    vec4(0.7, 0.2, 0.0, 1.0),  
+    vec4(0.7, 0.2, 0.0, 1.0),
 
 ];
 
@@ -83,8 +101,22 @@ window.onload = function init()
 }
 
 function drawHouse(){
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-    gl.drawArrays(gl.TRIANGLES, 4, 3);
+    let model = mult(translate(2, 0, 0), scalem(4, 2, 1));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(model));
+    
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4); //house body
+
+    model = mult(
+        scalem(4, 2, 1), 
+        rotateZ(135)
+    );
+    model = mult(
+        model,
+        translate(-0.1, -1.1, 0)
+    )
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(model));
+
+    gl.drawArrays(gl.TRIANGLES, 4, 3); //roof
 }
 
 function drawWindows(){
