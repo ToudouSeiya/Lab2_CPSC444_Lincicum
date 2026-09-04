@@ -14,7 +14,12 @@ var points = [
 
     vec4(0.0, 0.0, 0.5, 1.0), //triangle
     vec4(-1, 0, 0.5, 1.0),
-    vec4(-1, 1, 0.5, 1.0)
+    vec4(-1, 1, 0.5, 1.0),
+
+    vec4(0.0, 0.0, 0.5, 1.0), //window
+    vec4(-1, 0.0, 0.5, 1.0),
+    vec4(-1, 1, 0.5, 1.0),
+    vec4(0.0, 1, 0.5, 1.0),
 
 ];
 
@@ -28,6 +33,11 @@ var colors = [
     vec4(0.7, 0.2, 0.0, 1.0), //darker brown
     vec4(0.7, 0.2, 0.0, 1.0),  
     vec4(0.7, 0.2, 0.0, 1.0),
+
+    vec4(0.7, 0.9, 1.0, 1.0), //light blue
+    vec4(0.7, 0.9, 1.0, 1.0), 
+    vec4(0.7, 0.9, 1.0, 1.0),  
+    vec4(1, 1, 1.0, 1.0), //white highlight
 
 ];
 
@@ -100,6 +110,11 @@ window.onload = function init()
     render();
 }
 
+function resetTransformations(){
+    modelViewMatrix = lookAt(eye, at, up);
+    gl.uniformMatrix4fv( modelViewMatrixLoc, false, flatten(modelViewMatrix) );
+}
+
 function drawHouse(){
     let model = mult(translate(2, 0, 0), scalem(4, 2, 1));
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(model));
@@ -120,8 +135,44 @@ function drawHouse(){
 }
 
 function drawWindows(){
+    resetTransformations();
+
+    let model = mult(
+        scalem(1, 0.5, 1), 
+        rotateZ(0)
+    );
+    model = mult(
+        model,
+        translate(-0.5, 2, 0)
+    )
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(model));
+
+    gl.drawArrays(gl.TRIANGLE_FAN, 7, 4); //two smaller square windows
+
+    model = mult(model, translate(2, 0, 0)
+    )
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(model));
+
     gl.drawArrays(gl.TRIANGLE_FAN, 7, 4);
-    gl.drawArrays(gl.TRIANGLE_FAN, 11, 4);
+
+    //then the larger ones
+    resetTransformations();
+    model = mult(
+        scalem(1, 0.75, 1), 
+        rotateZ(0)
+    );
+    model = mult(
+        model,
+        translate(-0.7, 0.1, 0)
+    )
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(model));
+
+    gl.drawArrays(gl.TRIANGLE_FAN, 7, 4);
+
+    model = mult(model, translate(2.4, 0, 0))
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(model));
+
+    gl.drawArrays(gl.TRIANGLE_FAN, 7, 4);
 }
 
 function drawEntrance(){
@@ -135,8 +186,7 @@ function drawDiamond(){
 function render()
 {
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    modelViewMatrix = lookAt(eye, at, up);
-    gl.uniformMatrix4fv( modelViewMatrixLoc, false, flatten(modelViewMatrix) );
+    resetTransformations();
     drawHouse();
     drawWindows();
     drawEntrance();
