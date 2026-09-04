@@ -21,6 +21,10 @@ var points = [
     vec4(-1, 1, 0.5, 1.0),
     vec4(0.0, 1, 0.5, 1.0),
 
+    vec4(0.0, 0.0, 0.5, 1.0), //entrance
+    vec4(-1, 0.0, 0.5, 1.0),
+    vec4(-1, 1, 0.5, 1.0),
+    vec4(0.0, 1, 0.5, 1.0),
 ];
 
 var colors = [
@@ -38,6 +42,11 @@ var colors = [
     vec4(0.7, 0.9, 1.0, 1.0), 
     vec4(0.7, 0.9, 1.0, 1.0),  
     vec4(1, 1, 1.0, 1.0), //white highlight
+
+    vec4(0, 0, 0, 1), //black
+    vec4(0, 0, 0, 1),
+    vec4(0, 0, 0, 1),
+    vec4(0, 0, 0, 1),
 
 ];
 
@@ -176,7 +185,19 @@ function drawWindows(){
 }
 
 function drawEntrance(){
-    gl.drawArrays(gl.TRIANGLE_FAN, 15, 4);
+    resetTransformations();
+
+    let model = mult(
+        scalem(1, 0.8, 1), 
+        rotateZ(0)
+    );
+    model = mult(
+        model,
+        translate(0.5, 0, 0)
+    );
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(model));
+
+    gl.drawArrays(gl.TRIANGLE_FAN, 11, 4);
 }
 
 function drawDiamond(){
