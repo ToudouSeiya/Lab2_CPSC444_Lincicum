@@ -25,6 +25,11 @@ var points = [
     vec4(-1, 0.0, 0.5, 1.0),
     vec4(-1, 1, 0.5, 1.0),
     vec4(0.0, 1, 0.5, 1.0),
+
+    vec4(0.0, 1, 0.4, 1.0), //diamond
+    vec4(0.5, 0, 0.4, 1.0),
+    vec4(0, -1, 0.4, 1.0),
+    vec4(-0.5, 0, 0.4, 1.0),
 ];
 
 var colors = [
@@ -47,6 +52,11 @@ var colors = [
     vec4(0, 0, 0, 1),
     vec4(0, 0, 0, 1),
     vec4(0, 0, 0, 1),
+
+    vec4(1, 1, 0, 1), //yellow
+    vec4(1, 1, 0, 1),
+    vec4(1, 1, 0, 1),
+    vec4(1, 1, 0, 1),
 
 ];
 
@@ -201,7 +211,17 @@ function drawEntrance(){
 }
 
 function drawDiamond(){
-    gl.drawArrays(gl.TRIANGLE_FAN, 19, 4);
+    resetTransformations();
+
+    let model = mult(
+        translate(0, 2.5, 0), 
+        rotateZ(0)
+    );
+    model = mult(model, scalem(0.5, 0.5, 1));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(model));
+
+
+    gl.drawArrays(gl.TRIANGLE_FAN, 15, 4);
 }
 
 function render()
