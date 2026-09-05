@@ -195,6 +195,20 @@ function drawWindows(){
 }
 
 function drawEntrance(){
+    //update animation
+    if(down){
+         ty -= 0.01;
+         if (ty <= -1.1 ){
+             down = false;
+         }
+    }
+     else {
+        ty += 0.01;
+        if (ty >=0.0 ){
+            down = true;
+        }
+    }
+
     resetTransformations();
 
     let model = mult(
@@ -203,7 +217,7 @@ function drawEntrance(){
     );
     model = mult(
         model,
-        translate(0.5, 0, 0)
+        translate(0.5, 0 + ty, 0)
     );
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(model));
 
