@@ -213,9 +213,11 @@ function drawEntrance(){
 function drawDiamond(){
     resetTransformations();
 
+    theta+=2;
+
     let model = mult(
         translate(0, 2.5, 0), 
-        rotateZ(0)
+        rotateZ(theta)
     );
     model = mult(model, scalem(0.5, 0.5, 1));
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(model));
